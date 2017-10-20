@@ -7,9 +7,9 @@ let
     nz(t::Array{Int64, 1}) = sum(t .== 0)
     function correct_data(data::Array)
         x_correct = fill!(similar(data), 0)
-        for i in 1:size(x_train)[1]
-            nzeros = nz(x_train[i,:])
-            x_correct[i, nzeros+1:end] = x_train[i, 1:end-nzeros]
+        for i in 1:size(data)[1]
+            nzeros = nz(data[i,:])
+            x_correct[i, nzeros+1:end] = data[i, 1:end-nzeros]
         end
         return x_correct
     end

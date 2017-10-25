@@ -8,7 +8,7 @@ function prepare_data()
     try
 
         x_train, x_test, y_train, y_test =
-            JLD.load("omer/../data/CNN/CNN_data.jld", "x_train", "x_test", "y_train", "y_test")
+            JLD.load("../data/CNN/CNN_data.jld", "x_train", "x_test", "y_train", "y_test")
     catch e
         println("Couldn't find preloaded cifar data")
 

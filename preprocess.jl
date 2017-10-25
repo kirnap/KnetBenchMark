@@ -29,7 +29,7 @@ end
 # Minibatch 1 assumes correct minibatching mechanism for sequence labeling
 # When testing whether it is correctly batched or do not apply the f function in line 30
 let f(x::Int) = (x==0 ? 2 : x); global minibatch1
-    function minibatch1(corpus, labels, batchsize; usegpu=false)
+    function minibatch1(corpus, labels, batchsize; usegpu=true, major=:col)
         data, masks, ygolds = Any[], Any[], Any[]
         indix = randperm(length(labels))
         for i in 1:batchsize:size(corpus)[1]
@@ -44,6 +44,7 @@ let f(x::Int) = (x==0 ? 2 : x); global minibatch1
                 s1 = map(f, batch[:, r])
                 push!(sequences, s1)
                 m1 = (usegpu ? convert(KnetArray, mask) : mask )
+                m1 = (major == :col ? m1 : transpose(m1))
                 push!(_mask, m1)
             end
             push!(data, sequences)

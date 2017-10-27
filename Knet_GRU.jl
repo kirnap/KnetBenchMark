@@ -18,7 +18,7 @@ end
 # x train matrix needs to be manipulated before-hand
 let
     f(x::AbstractString, y::AbstractString) = map(x->convert(Int, x), readdlm("$y/$x"))
-    nz(t::Array{Int64, 1}) = sum(t .== 0)
+    nz(t) = sum(t .== 0)
     function correct_data(data::Array)
         x_correct = fill!(similar(data), 0)
         for i in 1:size(data)[1]
@@ -147,7 +147,7 @@ grugrad = grad(gruloss)
 # optimization parameter creator for parameters
 oparams{T<:Number}(::KnetArray{T},otype; o...)=otype(;o...)
 oparams{T<:Number}(::Array{T},otype; o...)=otype(;o...)
-oparams(a::Associative,otype; o...)=Dict(k=>oparams(v,otype;o...) for (k,v) in a)
+oparams(a::Associative,otype; o...)=Dict([k=>oparams(v,otype;o...) for (k,v) in a])
 oparams(a,otype; o...)=map(x->oparams(x,otype;o...), a)
 
 

@@ -1,5 +1,5 @@
 ### Installing
-Clone the repository to install the parser and dependencies:
+Clone the repository to download the code:
 
 ```sh
 git clone https://github.com/kirnap/KnetBenchMark.git && cd KnetBenchMark

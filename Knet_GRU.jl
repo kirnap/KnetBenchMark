@@ -1,6 +1,17 @@
 using Knet, ArgParse
 include("params_lstm.jl")
 
+
+if VERSION >= v"0.6.0"
+    @eval relu_dot(x) = relu.(x)
+    @eval sigm_dot(x) = sigm.(x)
+    @eval tanh_dot(x) = tanh.(x)
+else
+    @eval relu_dot(x) = relu(x)
+    @eval tanh_dot(x) = tanh(x)
+    @eval sigm_dot(x) = sigm(x)
+end
+
 # Preprocessing files for different data types
 # To preprocess the pre-loaded data
 # The reason why we preloaded the data is it was saved txt files
@@ -82,11 +93,11 @@ GRU_w2(model) = model[5]
 
 # column based gru implementation
 function gru(weight1, weight2, hidden, input)
-    gates = sigm.(weight1*vcat(input, hidden))
+    gates = sigm_dot(weight1*vcat(input, hidden))
     H = size(hidden, 1)
     z = gates[1:H, :]
     r = gates[1+H:2H, :]
-    change = tanh.(weight2 * vcat(r .* hidden, input))
+    change = tanh_dot(weight2 * vcat(r .* hidden, input))
     hidden = (1 .- z) .* hidden + z .* change
 
     #masking operation, in case mask needed

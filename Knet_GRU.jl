@@ -17,7 +17,7 @@ let
         return x_correct
     end
     global imdb_for_library
-    function imdb_for_library(;datadir="data/RNN")
+    function imdb_for_library(;datadir="RNN")
         x_train = correct_data(f("x_train.txt", datadir))
         y_train = f("y_train.txt", datadir)
         info("Train data loaded")
@@ -195,9 +195,7 @@ function main(args=ARGS)
     o = parse_args(args, s; as_symbols=true)
     println(s.description)
     inoptim = eval(parse(o[:optimization]))
-    major = ( o[:major] == 1 ? :col : :row )
     println("opts=", [(k,v) for (k,v) in o]...)
-    println("Major orientation $major")
     if o[:seed] > 0
         srand(o[:seed])
     end
@@ -205,10 +203,10 @@ function main(args=ARGS)
 
     info("reading the data...")
     x_train, x_test, y_train, y_test = imdb_for_library();
-    odata, _, ygolds = minibatch1(x_train, y_train, o[:batchsize]; usegpu=o[:usegpu], major=major)
+    odata, _, ygolds = minibatch1(x_train, y_train, o[:batchsize]; usegpu=o[:usegpu], major=:col)
 
     info("Initializing the model")
-    model = initmodel(o[:embed], o[:hidden], o[:maxfeatures], outlabel; usegpu=o[:usegpu], major=major)
+    model = initmodel(o[:embed], o[:hidden], o[:maxfeatures], outlabel; usegpu=o[:usegpu], major=:col)
     x = atype(zeros(Float32, o[:hidden], o[:batchsize]))
     state = Any[ atype(zeros(Float32, o[:hidden], o[:batchsize])) ]
 

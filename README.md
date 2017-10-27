@@ -10,7 +10,7 @@ julia installer.jl
 ### Running GRU model
 
 ```sh
-julia Knet_GRU.jl
+julia Knet_GRU.jl --usegpu
 ```
 
 
